@@ -5,12 +5,9 @@ import mk.ukim.finki.wp.kol2022.g1.model.Employee;
 import mk.ukim.finki.wp.kol2022.g1.model.EmployeeType;
 import mk.ukim.finki.wp.kol2022.g1.model.exceptions.InvalidEmployeeIdException;
 import mk.ukim.finki.wp.kol2022.g1.model.exceptions.InvalidSkillIdException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -62,6 +59,4 @@ public interface EmployeeService {
      * @return The entities that meet the filtering criteria
      */
     List<Employee> filter(Long skillId, Integer yearsOfService);
-
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

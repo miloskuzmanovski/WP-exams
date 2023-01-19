@@ -3,7 +3,6 @@ package mk.ukim.finki.wp.kol2022.g1.service;
 
 import mk.ukim.finki.wp.kol2022.g1.model.Skill;
 import mk.ukim.finki.wp.kol2022.g1.model.exceptions.InvalidSkillIdException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

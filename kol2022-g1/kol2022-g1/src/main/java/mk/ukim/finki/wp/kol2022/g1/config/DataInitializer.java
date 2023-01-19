@@ -1,18 +1,14 @@
 package mk.ukim.finki.wp.kol2022.g1.config;
 
 
-import mk.ukim.finki.wp.kol2022.g1.model.Employee;
 import mk.ukim.finki.wp.kol2022.g1.model.EmployeeType;
 import mk.ukim.finki.wp.kol2022.g1.model.Skill;
 import mk.ukim.finki.wp.kol2022.g1.service.EmployeeService;
 import mk.ukim.finki.wp.kol2022.g1.service.SkillService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,7 +16,6 @@ import java.util.stream.Stream;
 @Component
 public class DataInitializer {
 
-    public static final String ADMIN = "admin";
     private final SkillService skillService;
 
     private final EmployeeService service;

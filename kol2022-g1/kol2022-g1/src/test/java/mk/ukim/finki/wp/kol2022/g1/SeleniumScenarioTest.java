@@ -39,7 +39,7 @@ public class SeleniumScenarioTest {
 
     static {
         SubmissionHelper.exam = "wp-kol-2022-g1";
-        SubmissionHelper.index = "193114";
+        SubmissionHelper.index = "TODO";
     }
 
     @Autowired
@@ -59,7 +59,7 @@ public class SeleniumScenarioTest {
 
         ItemsPage listPage = ItemsPage.to(this.driver);
         AbstractPage.assertRelativeUrl(this.driver, "/");
-        listPage.assertItems(itemNum, itemNum *2);
+        listPage.assertItems(itemNum, itemNum * 2);
 
         SubmissionHelper.endTest();
     }

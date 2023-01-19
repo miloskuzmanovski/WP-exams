@@ -14,7 +14,7 @@ public class Kol2022Group1Application {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(5);
     }
 }

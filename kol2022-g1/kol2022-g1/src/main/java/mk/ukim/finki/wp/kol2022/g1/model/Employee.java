@@ -1,13 +1,12 @@
 package mk.ukim.finki.wp.kol2022.g1.model;
 
 
-import lombok.Data;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
 @Entity
 public class Employee {
 
@@ -24,7 +23,7 @@ public class Employee {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     private LocalDate employmentDate;
@@ -38,7 +37,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmployeeType type;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Skill> skills;
 
     public Long getId() {

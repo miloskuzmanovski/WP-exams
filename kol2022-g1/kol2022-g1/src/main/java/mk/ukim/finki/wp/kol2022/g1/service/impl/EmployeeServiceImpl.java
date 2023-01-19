@@ -11,6 +11,7 @@ import mk.ukim.finki.wp.kol2022.g1.service.EmployeeService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,24 +22,25 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService, UserDetailsService {
     private final EmployeeRepository employeeRepository;
-    private PasswordEncoder passwordEncoder;
-    private SkillRepository skillRepository;
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, SkillRepository skillRepository) {
+    private final SkillRepository skillRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, SkillRepository skillRepository, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
-        this.passwordEncoder = passwordEncoder;
         this.skillRepository = skillRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public List<Employee> listAll() {
-        return this.employeeRepository.findAll();
+        return employeeRepository.findAll();
     }
 
     @Override
     public Employee findById(Long id) {
-        return this.employeeRepository.findById(id).orElseThrow(InvalidEmployeeIdException::new);
+        return employeeRepository.findById(id).orElseThrow(InvalidEmployeeIdException::new);
     }
 
     @Override
@@ -50,24 +52,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee update(Long id, String name, String email, String password, EmployeeType type, List<Long> skillId, LocalDate employmentDate) {
-        Employee employee = this.findById(id);
-        String encryptedPassword = this.passwordEncoder.encode(password);
-        employee.setName(name);
-        employee.setEmail(email);
-        employee.setPassword(encryptedPassword);
-        employee.setType(type);
-        employee.setEmploymentDate(employmentDate);
-
-        List<Skill> skills = this.skillRepository.findAllById(skillId);
-        employee.setSkills(skills);
-        return employeeRepository.save(employee);
+        List<Skill> skillList = skillRepository.findAllById(skillId);
+        if (skillList.isEmpty()) throw new InvalidSkillIdException();
+        Employee old = employeeRepository.findById(id).orElseThrow(InvalidEmployeeIdException::new);
+        old.setName(name);
+        old.setEmail(email);
+        old.setPassword(passwordEncoder.encode(password));
+        old.setType(type);
+        old.setSkills(skillList);
+        return employeeRepository.save(old);
     }
 
     @Override
     public Employee delete(Long id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(InvalidEmployeeIdException::new);
-        employeeRepository.delete(employee);
-        return employee;
+        Employee old = employeeRepository.findById(id).orElseThrow(InvalidEmployeeIdException::new);
+        employeeRepository.delete(old);
+        return old;
     }
 
     @Override
@@ -97,5 +97,4 @@ public class EmployeeServiceImpl implements EmployeeService {
                 Stream.of(new SimpleGrantedAuthority(String.format("ROLE_%S", e.getType()))).collect(Collectors.toList())
         );
     }
-
 }

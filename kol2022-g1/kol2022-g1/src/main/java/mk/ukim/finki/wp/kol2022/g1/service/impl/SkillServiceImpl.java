@@ -15,19 +15,19 @@ public class SkillServiceImpl implements SkillService {
     public SkillServiceImpl(SkillRepository skillRepository) {
         this.skillRepository = skillRepository;
     }
+
     @Override
     public Skill findById(Long id) {
-        return this.skillRepository.findById(id).orElseThrow(InvalidSkillIdException::new);
+        return skillRepository.findById(id).orElseThrow(InvalidSkillIdException::new);
     }
 
     @Override
     public List<Skill> listAll() {
-        return this.skillRepository.findAll();
+        return skillRepository.findAll();
     }
 
     @Override
     public Skill create(String name) {
-        Skill skill = new Skill(name);
-        return this.skillRepository.save(skill);
+        return skillRepository.save(new Skill(name));
     }
 }
